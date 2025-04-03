@@ -17,7 +17,16 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(helmet()); // Security headers
-app.use(cors()); // Enable CORS
+
+// Configure CORS to allow netlify domain
+const corsOptions = {
+  origin: ['http://localhost:5173', 'https://tixmojo.netlify.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+app.use(cors(corsOptions)); // Enable CORS with options
+
 app.use(express.json()); // Parse JSON requests
 app.use(morgan('dev')); // HTTP request logger
 app.use(logger); // Custom logger
