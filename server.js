@@ -18,16 +18,14 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(helmet()); // Security headers
 
-// Configure CORS to allow netlify domain and other origins
+// Configure CORS to allow access from all origins in development
+// In production, you would specify exact origins for security
 const corsOptions = {
-  origin: [
-    'http://172.17.128.1:5173',
-    'https://tixmojo.netlify.app', 
-    'https://tixmojo-server-production.up.railway.app'
-  ],
+  origin: true, // Allow all origins for debugging
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
+  maxAge: 86400 // Cache preflight requests for 24 hours
 };
 app.use(cors(corsOptions)); // Enable CORS with options
 
