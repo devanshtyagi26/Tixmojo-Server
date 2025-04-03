@@ -1,4 +1,4 @@
-const { eventsData, spotlightEvents, flyerData } = require('../data/events');
+const { spotlightEvents, flyerData, locationEvents } = require('../data/events');
 const { sendSuccess, sendError } = require('../utils/responseUtils');
 
 // Event location details with additional data
@@ -38,12 +38,16 @@ const getAllEvents = (req, res) => {
   try {
     const location = req.query.location || 'Sydney';
     
-    // Filter events by location if provided
-    const filteredEvents = eventsData.filter(event => 
-      !location || event.eventLocation.toLowerCase() === location.toLowerCase()
-    );
+    // Capitalize first letter for consistency
+    const formattedLocation = location.charAt(0).toUpperCase() + location.slice(1).toLowerCase();
     
-    return sendSuccess(res, filteredEvents);
+    // Check if we have events for this location
+    if (locationEvents && locationEvents[formattedLocation]) {
+      return sendSuccess(res, locationEvents[formattedLocation]);
+    } else {
+      // If no specific events exist for this location, return empty array
+      return sendSuccess(res, []);
+    }
   } catch (error) {
     console.error('Error getting events:', error);
     return sendError(res, 500, 'Failed to get events', error);
@@ -94,12 +98,19 @@ const getEventById = (req, res) => {
   try {
     const { id } = req.params;
     
-    // First check regular events
-    let event = eventsData.find(event => event.id === id);
+    let event = null;
     
-    // If not found, check spotlight events
-    if (!event) {
-      event = spotlightEvents.find(event => event.id === id);
+    // Check spotlight events first
+    event = spotlightEvents.find(event => event.id === id);
+    
+    // If not found, check location-specific events
+    if (!event && locationEvents) {
+      Object.values(locationEvents).forEach(locationEventList => {
+        const foundEvent = locationEventList.find(event => event.id === id);
+        if (foundEvent) {
+          event = foundEvent;
+        }
+      });
     }
     
     // If still not found, return 404
@@ -132,9 +143,14 @@ const getEventById = (req, res) => {
  */
 const getLocations = (req, res) => {
   try {
-    // Extract unique locations from events
-    const allEvents = [...eventsData, ...spotlightEvents];
-    const locations = [...new Set(allEvents.map(event => event.eventLocation))];
+    // Get locations from locationEvents object keys
+    const locationsFromKeys = Object.keys(locationEvents || {});
+    
+    // Extract unique locations from spotlight events
+    const locationsFromSpotlight = [...new Set(spotlightEvents.map(event => event.eventLocation))];
+    
+    // Combine and deduplicate locations
+    const locations = [...new Set([...locationsFromKeys, ...locationsFromSpotlight])];
     
     return sendSuccess(res, locations);
   } catch (error) {
@@ -144,7 +160,7 @@ const getLocations = (req, res) => {
 };
 
 /**
- * Get raw events data directly from eventsData array
+ * Get raw events data from locationEvents
  * @param {object} req - Express request object
  * @param {object} res - Express response object
  */
@@ -152,15 +168,48 @@ const getRawEvents = (req, res) => {
   try {
     const location = req.query.location || 'Sydney';
     
-    // Filter events by location if provided
-    const filteredEvents = eventsData.filter(event => 
-      !location || event.eventLocation.toLowerCase() === location.toLowerCase()
-    );
+    // Capitalize first letter for consistency
+    const formattedLocation = location.charAt(0).toUpperCase() + location.slice(1).toLowerCase();
     
-    return sendSuccess(res, filteredEvents);
+    // Get events for the requested location
+    if (locationEvents && locationEvents[formattedLocation]) {
+      return sendSuccess(res, locationEvents[formattedLocation]);
+    } else {
+      // Return empty array if no events for this location
+      return sendSuccess(res, []);
+    }
   } catch (error) {
     console.error('Error getting raw events data:', error);
     return sendError(res, 500, 'Failed to get raw events data', error);
+  }
+};
+
+/**
+ * Get location-specific events
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ */
+const getLocationSpecificEvents = (req, res) => {
+  try {
+    const { location } = req.params;
+    
+    if (!location) {
+      return sendError(res, 400, 'Location parameter is required');
+    }
+    
+    // Capitalize first letter for consistency
+    const formattedLocation = location.charAt(0).toUpperCase() + location.slice(1).toLowerCase();
+    
+    // Check if we have events for this location
+    if (locationEvents && locationEvents[formattedLocation]) {
+      return sendSuccess(res, locationEvents[formattedLocation]);
+    } else {
+      // Return an empty array if no location events exist
+      return sendSuccess(res, []);
+    }
+  } catch (error) {
+    console.error('Error getting location-specific events:', error);
+    return sendError(res, 500, 'Failed to get location events', error);
   }
 };
 
@@ -191,6 +240,41 @@ const getLocationDetails = (req, res) => {
   }
 };
 
+/**
+ * Get all application data in a single response
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ */
+const getAllAppData = (req, res) => {
+  try {
+    // Compile all necessary data in a single response
+    const response = {
+      // Get all location-specific events
+      locationEvents: locationEvents,
+      
+      // Include spotlight events
+      spotlightEvents: spotlightEvents,
+      
+      // Include flyer data for carousels
+      flyerData: flyerData,
+      
+      // Include location metadata
+      locationDetails: locationDetails,
+      
+      // Include available locations list
+      locations: Object.keys(locationEvents).concat(
+        // Extract unique locations from spotlight events that might not be in locationEvents
+        [...new Set(spotlightEvents.map(event => event.eventLocation))]
+      ).filter((value, index, self) => self.indexOf(value) === index) // Remove duplicates
+    };
+    
+    return sendSuccess(res, response);
+  } catch (error) {
+    console.error('Error getting all app data:', error);
+    return sendError(res, 500, 'Failed to get application data', error);
+  }
+};
+
 module.exports = {
   getAllEvents,
   getSpotlightEvents,
@@ -198,5 +282,7 @@ module.exports = {
   getEventById,
   getLocations,
   getLocationDetails,
-  getRawEvents
+  getRawEvents,
+  getLocationSpecificEvents,
+  getAllAppData
 };

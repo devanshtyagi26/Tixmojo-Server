@@ -2,8 +2,18 @@
 const formatDate = (date) => {
   const day = date.getDate();
   const monthNames = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   const month = monthNames[date.getMonth()];
   return `${day} ${month}`;
@@ -29,138 +39,36 @@ const nextMonthFormatted = formatDate(nextMonth);
 
 // Format for human readable display
 const formatFullDate = (date) => {
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
   const day = date.getDate();
   const monthNames = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   const month = monthNames[date.getMonth()];
   const year = date.getFullYear();
   const dayName = days[date.getDay()];
-  
+
   return `${dayName}, ${day} ${month}, ${year}`;
 };
-
-// Regular events data
-const eventsData = [
-  {
-    id: "todays-live-concert",
-    eventName: " Event 1",
-    eventAddress: "Pulse Live (Former Yang), Sydney",
-    eventLocation: "Sydney",
-    eventPrice: "399",
-    eventPoster: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=2940&auto=format&fit=crop",
-    rankScore: 95,
-    eventRanking: "1",
-    eventDateType: "today",
-    date: formatFullDate(today),
-    time: "07:00 pm to 11:00 pm (AEST)",
-    venueName: "Pulse Live",
-    venueAddress: "22 Darling Drive, Sydney NSW 2000",
-    locationMap: "https://maps.google.com/?q=22+Darling+Drive+Sydney+NSW+2000",
-    tags: ["Today's Event", "Music", "Live Concert", "Featured"],
-    description: `<p>Experience the live concert event of the year with some of the best artists in the industry! Join us for an unforgettable night of music, energy, and entertainment.</p>
-    <p>Lineup includes:</p>
-    <ul>
-      <li>Headliner performance by chart-topping artists</li>
-      <li>Special guest appearances</li>
-      <li>State-of-the-art sound and lighting</li>
-      <li>VIP experiences available</li>
-    </ul>
-    <p>Doors open at 7:00 PM. Get your tickets early as this event will sell out!</p>`,
-    organizer: "Sydney Live Events",
-    sponsors: ["Spotify", "JBL"]
-  },
-  {
-    id: "tomorrows-dance-party",
-    eventName: "TOMORROW'S DANCE PARTY",
-    eventAddress: "Marina Bay Sands, Sydney",
-    eventLocation: "Sydney",
-    eventPrice: "299",
-    eventPoster: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=2574&auto=format&fit=crop",
-    rankScore: 90,
-    eventRanking: "1",
-    eventDateType: "tomorrow",
-    date: formatFullDate(tomorrow),
-    time: "09:00 pm to 03:00 am (AEST)",
-    venueName: "Marina Bay Club",
-    venueAddress: "35 Harbour Street, Sydney NSW 2000",
-    locationMap: "https://maps.google.com/?q=35+Harbour+Street+Sydney+NSW+2000",
-    tags: ["Tomorrow's Event", "Nightlife", "Dance", "18+"],
-    description: `<p>The biggest dance party of the season is here! Join hundreds of party-goers for an electrifying night of dancing, music, and celebration.</p>
-    <p>What to expect:</p>
-    <ul>
-      <li>Top DJs spinning the latest hits</li>
-      <li>Multiple dance floors with different music genres</li>
-      <li>Premium bar service</li>
-      <li>Light shows and special effects</li>
-      <li>Dress code: Stylish party attire</li>
-    </ul>
-    <p>This event is 18+ only. Valid ID required for entry.</p>`,
-    organizer: "Sydney Nightlife Productions",
-    sponsors: ["Red Bull", "Absolut"]
-  },
-  {
-    id: "this-week-festival",
-    eventName: "THIS WEEK FESTIVAL",
-    eventAddress: "National Stadium, Sydney",
-    eventLocation: "Sydney",
-    eventPrice: "499",
-    eventPoster: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=2940&auto=format&fit=crop",
-    rankScore: 88,
-    eventRanking: "1",
-    eventDateType: "thisWeek",
-    date: formatFullDate(nextWeek),
-    time: "12:00 pm to 11:00 pm (AEST)",
-    venueName: "National Stadium",
-    venueAddress: "Olympic Park, Sydney NSW 2127",
-    locationMap: "https://maps.google.com/?q=Olympic+Park+Sydney+NSW+2127",
-    tags: ["Festival", "Music", "Food", "Art", "All-Day"],
-    description: `<p>The most anticipated festival of the year has arrived! A full day of music, art, food, and unforgettable experiences.</p>
-    <p>Festival highlights:</p>
-    <ul>
-      <li>Multiple stages with over 30 performers</li>
-      <li>International headliners and local talent</li>
-      <li>Gourmet food stalls and craft beverages</li>
-      <li>Interactive art installations</li>
-      <li>Chill-out zones and VIP areas</li>
-    </ul>
-    <p>Festival runs rain or shine. No refunds. Come prepared for a day of fun!</p>`,
-    organizer: "Festival Australia",
-    sponsors: ["Corona", "Mastercard", "JBL"]
-  },
-  {
-    id: "love-is-blind",
-    eventName: "LOVE IS BLIND",
-    eventAddress: "1-Altitude Coast, Singapore",
-    eventLocation: "Singapore",
-    eventPrice: "254",
-    eventPoster: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2940&auto=format&fit=crop",
-    rankScore: 92,
-    eventRanking: "1",
-    eventDateType: "nextWeek",
-    date: "Sunday, 2 Mar, 2025",
-    time: "02:00 pm to 05:00 pm (IST)",
-    venueName: "1-Altitude Coast",
-    venueAddress: "10 Artillery Avenue Singapore, 099951 Singapore",
-    locationMap: "https://maps.google.com/?q=1-Altitude+Coast+Singapore+099951",
-    tags: ["Bollywood", "Cultural", "Party", "International", "Themed"],
-    description: `<p>Join us for an unforgettable evening celebrating the magic of Bollywood at our exclusive "Love is Blind" party. This vibrant event brings together the colorful aesthetics, energetic music, and romantic charm of Indian cinema.</p>
-    <p>Experience a night filled with:</p>
-    <ul>
-      <li>Spectacular live performances</li>
-      <li>DJ playing the best Bollywood hits</li>
-      <li>Themed photo booths</li>
-      <li>Special appearances</li>
-      <li>Delicious Indian cuisine and drinks</li>
-    </ul>
-    <p>Dress code: Bollywood-inspired attire encouraged! Think colorful sarees, kurtas, or modern Bollywood fashion.</p>
-    <p>This event sells out quickly every year, so secure your tickets early!</p>`,
-    organizer: "Bollywood Nights Singapore",
-    sponsors: ["HSBC"]
-  }
-];
 
 // Spotlight events data
 const spotlightEvents = [
@@ -170,7 +78,8 @@ const spotlightEvents = [
     eventAddress: "National Gallery, Sydney",
     eventLocation: "Sydney",
     eventPrice: "299",
-    eventPoster: "https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=2787&auto=format&fit=crop",
+    eventPoster:
+      "https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=2787&auto=format&fit=crop",
     rankScore: 98,
     eventRanking: "1",
     eventDateType: "nextWeek",
@@ -191,7 +100,7 @@ const spotlightEvents = [
     </ul>
     <p>Formal attire required. Limited tickets available.</p>`,
     organizer: "Sydney Arts Foundation",
-    sponsors: ["Sotheby's", "Westpac"]
+    sponsors: ["Sotheby's", "Westpac"],
   },
   {
     id: "vip-jazz-evening",
@@ -199,7 +108,8 @@ const spotlightEvents = [
     eventAddress: "Opera House, Sydney",
     eventLocation: "Sydney",
     eventPrice: "349",
-    eventPoster: "https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=2940&auto=format&fit=crop",
+    eventPoster:
+      "https://images.unsplash.com/photo-1501612780327-45045538702b?q=80&w=2940&auto=format&fit=crop",
     rankScore: 95,
     eventRanking: "2",
     eventDateType: "thisWeek",
@@ -207,7 +117,8 @@ const spotlightEvents = [
     time: "08:00 pm to 11:30 pm (AEST)",
     venueName: "Sydney Opera House",
     venueAddress: "Bennelong Point, Sydney NSW 2000",
-    locationMap: "https://maps.google.com/?q=Sydney+Opera+House+Bennelong+Point+Sydney+NSW+2000",
+    locationMap:
+      "https://maps.google.com/?q=Sydney+Opera+House+Bennelong+Point+Sydney+NSW+2000",
     tags: ["Jazz", "VIP", "Live Music", "Opera House", "Evening"],
     description: `<p>An intimate evening of world-class jazz at the iconic Sydney Opera House. This VIP event features acclaimed jazz musicians in a sophisticated setting.</p>
     <p>The evening includes:</p>
@@ -220,45 +131,238 @@ const spotlightEvents = [
     </ul>
     <p>Smart casual attire. Early arrival recommended.</p>`,
     organizer: "Sydney Jazz Foundation",
-    sponsors: ["Yamaha", "American Express"]
-  }
+    sponsors: ["Yamaha", "American Express"],
+  },
 ];
 
 // Carousel flyers data
 const flyerData = [
   {
     id: "bollywood-sydney",
-    image: "https://images.unsplash.com/photo-1556035511-3168381ea4d4?q=80&w=3087&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1556035511-3168381ea4d4?q=80&w=3087&auto=format&fit=crop",
     title: "Bollywood Sydney",
     location: "Mirror Bar, The Rocks",
     date: "15 MAR",
     ticketLink: "https://tixmojo.com",
-    ticketSite: "TIXMOJO.COM"
+    ticketSite: "TIXMOJO.COM",
   },
   {
     id: "st-patricks-day",
-    image: "https://images.unsplash.com/photo-1628359355624-855775b5c9c4?q=80&w=3000&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1628359355624-855775b5c9c4?q=80&w=3000&auto=format&fit=crop",
     title: "St. Patrick's Day",
     location: "Jameson Connects, Gurugram",
     date: "17 MAR",
     ticketLink: "https://tixmojo.com",
-    ticketSite: "TIXMOJO.COM"
+    ticketSite: "TIXMOJO.COM",
   },
   {
     id: "love-is-blind",
-    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2940&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2940&auto=format&fit=crop",
     title: "Love is Blind",
     location: "1-Altitude Coast",
     date: "2 MAR",
     ticketLink: "https://tixmojo.com",
-    ticketSite: "TIXMOJO.COM"
+    ticketSite: "TIXMOJO.COM",
+  },
+];
+
+// Custom events for Sydney and Singapore
+const sydneyEvents = [
+  {
+    id: "sydney-opera-house-symphony",
+    eventName: "SYDNEY OPERA HOUSE SYMPHONY",
+    eventAddress: "Sydney Opera House, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "199",
+    eventPoster: "https://images.unsplash.com/photo-1595740229246-cfdda61917c6?q=80&w=2836&auto=format&fit=crop",
+    rankScore: 98,
+    eventRanking: "1",
+    eventDateType: "thisWeek",
+    date: formatFullDate(nextWeek),
+    time: "7:30 pm to 10:00 pm (AEST)",
+    venueName: "Sydney Opera House",
+    venueAddress: "Bennelong Point, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=Sydney+Opera+House",
+    tags: ["Classical", "Symphony", "Orchestra", "Cultural"],
+    description: `<p>Experience the magic of classical music at the iconic Sydney Opera House. The Sydney Symphony Orchestra presents an evening of timeless compositions by Mozart, Beethoven, and Tchaikovsky.</p>
+    <p>The program includes:</p>
+    <ul>
+      <li>Mozart's Symphony No. 40 in G minor</li>
+      <li>Beethoven's Piano Concerto No. 5</li>
+      <li>Tchaikovsky's Symphony No. 6 "Pathétique"</li>
+    </ul>
+    <p>This performance features world-renowned guest conductor James Williams and piano soloist Emily Chang.</p>`,
+    organizer: "Sydney Symphony Orchestra",
+    sponsors: ["Australia Council for the Arts", "NSW Government"]
+  },
+  {
+    id: "sydney-harbour-food-festival",
+    eventName: "SYDNEY HARBOUR FOOD FESTIVAL",
+    eventAddress: "Circular Quay, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "75",
+    eventPoster: "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2940&auto=format&fit=crop",
+    rankScore: 96,
+    eventRanking: "2",
+    eventDateType: "today",
+    date: formatFullDate(today),
+    time: "11:00 am to 9:00 pm (AEST)",
+    venueName: "Circular Quay",
+    venueAddress: "Circular Quay, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=Circular+Quay+Sydney",
+    tags: ["Food", "Festival", "Culinary", "Waterfront", "Today's Event"],
+    description: `<p>Indulge in the ultimate culinary experience at the Sydney Harbour Food Festival. Set against the stunning backdrop of Sydney Harbour, this festival brings together the city's finest chefs, restaurants, and food producers.</p>
+    <p>Festival highlights:</p>
+    <ul>
+      <li>Cooking demonstrations by celebrity chefs</li>
+      <li>Artisanal food market featuring local producers</li>
+      <li>Wine and craft beer tasting sessions</li>
+      <li>Seafood pavilion showcasing fresh Australian seafood</li>
+      <li>Street food alley with international cuisines</li>
+      <li>Live music and entertainment throughout the day</li>
+    </ul>
+    <p>Tickets include entry and five food sampling tokens. Additional tokens available for purchase at the event.</p>`,
+    organizer: "Sydney Food Events",
+    sponsors: ["Tourism NSW", "Australian Culinary Federation"]
+  },
+  {
+    id: "bondi-beach-volleyball-tournament",
+    eventName: "BONDI BEACH VOLLEYBALL TOURNAMENT",
+    eventAddress: "Bondi Beach, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "25",
+    eventPoster: "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?q=80&w=2007&auto=format&fit=crop",
+    rankScore: 92,
+    eventRanking: "3",
+    eventDateType: "tomorrow",
+    date: formatFullDate(tomorrow),
+    time: "9:00 am to 6:00 pm (AEST)",
+    venueName: "Bondi Beach",
+    venueAddress: "Queen Elizabeth Dr, Bondi Beach NSW 2026",
+    locationMap: "https://maps.google.com/?q=Bondi+Beach+Sydney",
+    tags: ["Sports", "Beach", "Volleyball", "Tournament", "Tomorrow's Event"],
+    description: `<p>Join us for the annual Bondi Beach Volleyball Tournament, featuring competitive matches, music, food, and good vibes!</p>
+    <p>Event details:</p>
+    <ul>
+      <li>Professional and amateur divisions</li>
+      <li>Teams of 2-4 players (register in advance)</li>
+      <li>Cash prizes for winning teams</li>
+      <li>Beach bar and food stalls</li>
+      <li>DJ sets throughout the day</li>
+      <li>Free volleyball clinics for spectators</li>
+    </ul>
+    <p>Spectator tickets include access to viewing areas, shade tents, and one complimentary drink.</p>`,
+    organizer: "Sydney Beach Sports Association",
+    sponsors: ["Mikasa", "Australian Volleyball Federation"]
   }
 ];
 
+const singaporeEvents = [
+  {
+    id: "gardens-by-the-bay-light-festival",
+    eventName: "GARDENS BY THE BAY LIGHT FESTIVAL",
+    eventAddress: "Gardens by the Bay, Singapore",
+    eventLocation: "Singapore",
+    eventPrice: "35",
+    eventPoster: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=2835&auto=format&fit=crop",
+    rankScore: 97,
+    eventRanking: "1",
+    eventDateType: "thisWeek",
+    date: formatFullDate(nextWeek),
+    time: "7:00 pm to 11:00 pm (SGT)",
+    venueName: "Gardens by the Bay",
+    venueAddress: "18 Marina Gardens Dr, Singapore 018953",
+    locationMap: "https://maps.google.com/?q=Gardens+by+the+Bay+Singapore",
+    tags: ["Light Festival", "Art", "Outdoor", "Family"],
+    description: `<p>Witness Gardens by the Bay transformed into a magical wonderland of lights and sounds during this spectacular night festival.</p>
+    <p>Festival features:</p>
+    <ul>
+      <li>Immersive light installations by international artists</li>
+      <li>Interactive projection mapping on the Supertrees</li>
+      <li>Illuminated garden trails</li>
+      <li>Live performances by local and international musicians</li>
+      <li>Food village featuring Singapore's best street food</li>
+      <li>Art workshops for all ages</li>
+    </ul>
+    <p>Special extended hours for the Flower Dome and Cloud Forest during the festival period.</p>`,
+    organizer: "Gardens by the Bay",
+    sponsors: ["Singapore Tourism Board", "National Arts Council"]
+  },
+  {
+    id: "singapore-night-food-tour",
+    eventName: "SINGAPORE NIGHT FOOD TOUR",
+    eventAddress: "Chinatown, Singapore",
+    eventLocation: "Singapore",
+    eventPrice: "85",
+    eventPoster: "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?q=80&w=2940&auto=format&fit=crop",
+    rankScore: 94,
+    eventRanking: "2",
+    eventDateType: "tomorrow",
+    date: formatFullDate(tomorrow),
+    time: "6:00 pm to 10:00 pm (SGT)",
+    venueName: "Chinatown Food Street",
+    venueAddress: "Smith Street, Chinatown, Singapore",
+    locationMap: "https://maps.google.com/?q=Chinatown+Food+Street+Singapore",
+    tags: ["Food Tour", "Culinary", "Cultural", "Night", "Tomorrow's Event"],
+    description: `<p>Embark on a gastronomic journey through Singapore's vibrant food scene on this guided night food tour.</p>
+    <p>Tour highlights:</p>
+    <ul>
+      <li>Visit to 5 different food stops across Singapore's diverse neighborhoods</li>
+      <li>Sample over 12 local dishes and delicacies</li>
+      <li>Learn about the cultural significance of Singapore's hawker centers</li>
+      <li>Try Singapore's signature dishes like Hainanese Chicken Rice, Laksa, and Chili Crab</li>
+      <li>Expert local guide sharing insights on Singapore's food culture</li>
+      <li>Small group experience (maximum 8 participants)</li>
+    </ul>
+    <p>Tour includes all food tastings, one local beverage, and transportation between food stops.</p>`,
+    organizer: "Singapore Food Trails",
+    sponsors: ["Singapore Tourism Board"]
+  },
+  {
+    id: "marina-bay-tech-conference",
+    eventName: "MARINA BAY TECH CONFERENCE",
+    eventAddress: "Marina Bay Sands, Singapore",
+    eventLocation: "Singapore",
+    eventPrice: "299",
+    eventPoster: "https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?q=80&w=2940&auto=format&fit=crop",
+    rankScore: 93,
+    eventRanking: "3",
+    eventDateType: "today",
+    date: formatFullDate(today),
+    time: "9:00 am to 6:00 pm (SGT)",
+    venueName: "Marina Bay Sands Convention Centre",
+    venueAddress: "10 Bayfront Avenue, Singapore 018956",
+    locationMap: "https://maps.google.com/?q=Marina+Bay+Sands+Singapore",
+    tags: ["Tech", "Conference", "Business", "Innovation", "Today's Event"],
+    description: `<p>Asia's premier technology conference bringing together innovators, entrepreneurs, and industry leaders to explore the future of technology.</p>
+    <p>Conference agenda:</p>
+    <ul>
+      <li>Keynote speeches by global tech visionaries</li>
+      <li>Panel discussions on AI, blockchain, cybersecurity, and more</li>
+      <li>Startup pitch competition with $100,000 prize</li>
+      <li>Product demos and interactive exhibitions</li>
+      <li>Networking sessions with industry leaders</li>
+      <li>Career fair featuring top tech companies</li>
+    </ul>
+    <p>Full day pass includes access to all sessions, lunch, refreshments, and networking reception.</p>`,
+    organizer: "TechAsia Events",
+    sponsors: ["Google", "Microsoft", "Singapore Economic Development Board"]
+  }
+];
+
+// Add location-specific events collections
+const locationEvents = {
+  "Sydney": sydneyEvents,
+  "Singapore": singaporeEvents
+};
+
 module.exports = {
-  eventsData,
   spotlightEvents,
   flyerData,
+  locationEvents,
   formatDate,
-  formatFullDate
+  formatFullDate,
 };
