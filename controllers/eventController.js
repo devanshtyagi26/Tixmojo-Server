@@ -1,4 +1,4 @@
-const { spotlightEvents, flyerData, locationEvents } = require('../data/events');
+const { spotlightEvents, flyerData, locationEvents, organizers } = require('../data/events');
 const { sendSuccess, sendError } = require('../utils/responseUtils');
 
 // Event location details with additional data
@@ -118,15 +118,24 @@ const getEventById = (req, res) => {
       return sendError(res, 404, 'Event not found');
     }
     
-    // Log tags for debugging
-    console.log(`Event ${id} tags:`, event.tags);
-    console.log('Is tags array?', Array.isArray(event.tags));
-    
     // Make sure tags exist and are always returned as an array
     if (!event.tags) {
       event.tags = ["Featured Event"];
     } else if (!Array.isArray(event.tags)) {
       event.tags = [event.tags];
+    }
+    
+    // Fetch organizer details if available
+    if (event.organizerId && organizers[event.organizerId]) {
+      // Replace organizerId with full organizer details
+      event.organizer = organizers[event.organizerId];
+      
+      // Add organizer stats
+      event.organizer.stats = {
+        totalEvents: 24,
+        rating: 4.9,
+        ticketsSold: "5k+"
+      };
     }
     
     return sendSuccess(res, event);
@@ -241,6 +250,48 @@ const getLocationDetails = (req, res) => {
 };
 
 /**
+ * Get events by organizer ID
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ */
+const getEventsByOrganizer = (req, res) => {
+  try {
+    const { organizerId } = req.params;
+    
+    if (!organizerId) {
+      return sendError(res, 400, 'Organizer ID parameter is required');
+    }
+    
+    // Find all events from this organizer across all locations and spotlight events
+    let organizerEvents = [];
+    
+    // Check spotlight events
+    const spotlightOrganizerEvents = spotlightEvents.filter(event => event.organizerId === organizerId);
+    organizerEvents = [...organizerEvents, ...spotlightOrganizerEvents];
+    
+    // Check location-specific events
+    if (locationEvents) {
+      Object.values(locationEvents).forEach(locationEventList => {
+        const foundEvents = locationEventList.filter(event => event.organizerId === organizerId);
+        if (foundEvents.length > 0) {
+          organizerEvents = [...organizerEvents, ...foundEvents];
+        }
+      });
+    }
+    
+    // Remove duplicates (in case an event appears in both spotlight and location events)
+    organizerEvents = organizerEvents.filter((event, index, self) => 
+      index === self.findIndex(e => e.id === event.id)
+    );
+    
+    return sendSuccess(res, organizerEvents);
+  } catch (error) {
+    console.error('Error getting events by organizer:', error);
+    return sendError(res, 500, 'Failed to get events by organizer', error);
+  }
+};
+
+/**
  * Get all application data in a single response
  * @param {object} req - Express request object
  * @param {object} res - Express response object
@@ -284,5 +335,6 @@ module.exports = {
   getLocationDetails,
   getRawEvents,
   getLocationSpecificEvents,
+  getEventsByOrganizer,
   getAllAppData
 };

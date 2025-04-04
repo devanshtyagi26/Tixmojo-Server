@@ -25,6 +25,9 @@ router.get('/locations', eventController.getLocations);
 // Get location details (all locations or specific one)
 router.get('/locations/:location?', eventController.getLocationDetails);
 
+// Get events by organizer ID
+router.get('/organizer/:organizerId', eventController.getEventsByOrganizer);
+
 // Get all application data in a single call
 router.get('/app-data', eventController.getAllAppData);
 

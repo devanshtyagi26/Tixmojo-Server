@@ -70,6 +70,98 @@ const formatFullDate = (date) => {
   return `${dayName}, ${day} ${month}, ${year}`;
 };
 
+// Organizers data with complete details
+const organizers = {
+  "org_saf001": {
+    id: "org_saf001",
+    name: "Sydney Arts Foundation",
+    description: "A leading event organizer known for creating exceptional experiences for participants. With a proven track record of successful events, they focus on attention to detail and memorable moments.",
+    location: "Sydney",
+    contactEmail: "events@sydneyarts.org",
+    phone: "+61 2 9876 5432",
+    website: "www.sydneyartsfoundation.org",
+    specialization: ["Art Exhibitions", "Cultural Events", "Galas"],
+    yearEstablished: 1995
+  },
+  "org_sjf002": {
+    id: "org_sjf002",
+    name: "Sydney Jazz Foundation",
+    description: "Premier jazz event organizer bringing world-class musical experiences to Sydney. Known for curating intimate jazz evenings and large-scale festivals.",
+    location: "Sydney",
+    contactEmail: "bookings@sydneyjazz.org",
+    phone: "+61 2 9876 1234",
+    website: "www.sydneyjazzfoundation.org",
+    specialization: ["Jazz Concerts", "Music Festivals", "VIP Events"],
+    yearEstablished: 1988
+  },
+  "org_sso003": {
+    id: "org_sso003",
+    name: "Sydney Symphony Orchestra",
+    description: "Australia's premier orchestra organization, delivering world-class classical music performances and cultural experiences.",
+    location: "Sydney",
+    contactEmail: "info@sydneysymphony.org",
+    phone: "+61 2 9876 8765",
+    website: "www.sydneysymphony.org",
+    specialization: ["Classical Concerts", "Orchestra Events", "Musical Education"],
+    yearEstablished: 1932
+  },
+  "org_sfe004": {
+    id: "org_sfe004",
+    name: "Sydney Food Events",
+    description: "Leading culinary event organizer specializing in food festivals, tastings, and gastronomic experiences across Sydney.",
+    location: "Sydney",
+    contactEmail: "taste@sydneyfoodevents.com",
+    phone: "+61 2 9876 9876",
+    website: "www.sydneyfoodevents.com",
+    specialization: ["Food Festivals", "Culinary Events", "Tastings"],
+    yearEstablished: 2010
+  },
+  "org_sbsa005": {
+    id: "org_sbsa005",
+    name: "Sydney Beach Sports Association",
+    description: "Premier sports event organizer specializing in beach sports tournaments and recreational events.",
+    location: "Sydney",
+    contactEmail: "events@sydneybeachsports.org",
+    phone: "+61 2 9876 3456",
+    website: "www.sydneybeachsports.org",
+    specialization: ["Beach Sports", "Tournaments", "Recreational Events"],
+    yearEstablished: 2005
+  },
+  "org_gbb006": {
+    id: "org_gbb006",
+    name: "Gardens by the Bay",
+    description: "Singapore's premier horticultural attraction and event space, known for spectacular light shows and cultural festivals.",
+    location: "Singapore",
+    contactEmail: "events@gardensbythebay.com.sg",
+    phone: "+65 6420 6848",
+    website: "www.gardensbythebay.com.sg",
+    specialization: ["Light Festivals", "Cultural Events", "Garden Shows"],
+    yearEstablished: 2012
+  },
+  "org_sft007": {
+    id: "org_sft007",
+    name: "Singapore Food Trails",
+    description: "Expert food tour operator showcasing Singapore's rich culinary heritage through guided experiences.",
+    location: "Singapore",
+    contactEmail: "bookings@singaporefoodtrails.com.sg",
+    phone: "+65 6789 5432",
+    website: "www.singaporefoodtrails.com.sg",
+    specialization: ["Food Tours", "Culinary Experiences", "Cultural Tours"],
+    yearEstablished: 2015
+  },
+  "org_tae008": {
+    id: "org_tae008",
+    name: "TechAsia Events",
+    description: "Leading technology conference and event organizer in Asia, connecting innovators and industry leaders.",
+    location: "Singapore",
+    contactEmail: "info@techasiaevents.com.sg",
+    phone: "+65 6789 8765",
+    website: "www.techasiaevents.com.sg",
+    specialization: ["Tech Conferences", "Innovation Events", "Business Networking"],
+    yearEstablished: 2008
+  }
+};
+
 // Spotlight events data
 const spotlightEvents = [
   {
@@ -99,7 +191,8 @@ const spotlightEvents = [
       <li>Networking with industry leaders</li>
     </ul>
     <p>Formal attire required. Limited tickets available.</p>`,
-    organizer: "Sydney Arts Foundation",
+
+    organizerId: "org_saf001",
     sponsors: ["Sotheby's", "Westpac"],
   },
   {
@@ -130,7 +223,7 @@ const spotlightEvents = [
       <li>Commemorative program</li>
     </ul>
     <p>Smart casual attire. Early arrival recommended.</p>`,
-    organizer: "Sydney Jazz Foundation",
+    organizerId: "org_sjf002",
     sponsors: ["Yamaha", "American Express"],
   },
 ];
@@ -195,7 +288,7 @@ const sydneyEvents = [
       <li>Tchaikovsky's Symphony No. 6 "Pathétique"</li>
     </ul>
     <p>This performance features world-renowned guest conductor James Williams and piano soloist Emily Chang.</p>`,
-    organizer: "Sydney Symphony Orchestra",
+    organizerId: "org_sso003",
     sponsors: ["Australia Council for the Arts", "NSW Government"]
   },
   {
@@ -225,7 +318,7 @@ const sydneyEvents = [
       <li>Live music and entertainment throughout the day</li>
     </ul>
     <p>Tickets include entry and five food sampling tokens. Additional tokens available for purchase at the event.</p>`,
-    organizer: "Sydney Food Events",
+    organizerId: "org_sfe004",
     sponsors: ["Tourism NSW", "Australian Culinary Federation"]
   },
   {
@@ -255,7 +348,7 @@ const sydneyEvents = [
       <li>Free volleyball clinics for spectators</li>
     </ul>
     <p>Spectator tickets include access to viewing areas, shade tents, and one complimentary drink.</p>`,
-    organizer: "Sydney Beach Sports Association",
+    organizerId: "org_sbsa005",
     sponsors: ["Mikasa", "Australian Volleyball Federation"]
   }
 ];
@@ -288,7 +381,7 @@ const singaporeEvents = [
       <li>Art workshops for all ages</li>
     </ul>
     <p>Special extended hours for the Flower Dome and Cloud Forest during the festival period.</p>`,
-    organizer: "Gardens by the Bay",
+    organizerId: "org_gbb006",
     sponsors: ["Singapore Tourism Board", "National Arts Council"]
   },
   {
@@ -318,7 +411,7 @@ const singaporeEvents = [
       <li>Small group experience (maximum 8 participants)</li>
     </ul>
     <p>Tour includes all food tastings, one local beverage, and transportation between food stops.</p>`,
-    organizer: "Singapore Food Trails",
+    organizerId: "org_sft007",
     sponsors: ["Singapore Tourism Board"]
   },
   {
@@ -348,10 +441,223 @@ const singaporeEvents = [
       <li>Career fair featuring top tech companies</li>
     </ul>
     <p>Full day pass includes access to all sessions, lunch, refreshments, and networking reception.</p>`,
-    organizer: "TechAsia Events",
+    organizerId: "org_tae008",
     sponsors: ["Google", "Microsoft", "Singapore Economic Development Board"]
   }
 ];
+
+// Additional events for each organizer
+const additionalEvents = [
+  // Additional events for Sydney Arts Foundation (org_saf001)
+  {
+    id: "sydney-art-festival",
+    eventName: "SYDNEY ART FESTIVAL",
+    eventAddress: "Sydney Art Gallery, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "149",
+    eventPoster: "https://images.unsplash.com/photo-1607462109225-6b64ae2dd3cb?q=80&w=2787&auto=format&fit=crop",
+    rankScore: 87,
+    eventRanking: "4",
+    eventDateType: "nextMonth",
+    date: formatFullDate(nextMonth),
+    time: "10:00 am to 8:00 pm (AEST)",
+    venueName: "Sydney Art Gallery",
+    venueAddress: "Art Street, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=Sydney+Art+Gallery+Sydney+NSW+2000",
+    tags: ["Art", "Festival", "Family", "Cultural"],
+    description: `<p>Experience Sydney's premier art festival featuring works from local and international artists. This annual event showcases contemporary art in all its forms and celebrates artistic expression and creativity.</p>
+    <p>Festival highlights:</p>
+    <ul>
+      <li>Interactive art installations</li>
+      <li>Live painting demonstrations</li>
+      <li>Artist talks and workshops</li>
+      <li>Children's art zone</li>
+      <li>Food and drink vendors</li>
+    </ul>
+    <p>Perfect for art lovers of all ages. Family tickets available.</p>`,
+    organizerId: "org_saf001",
+    sponsors: ["Sydney City Council", "Art Australia Foundation"]
+  },
+  {
+    id: "sydney-cultural-night",
+    eventName: "SYDNEY CULTURAL NIGHT",
+    eventAddress: "Hyde Park, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "85",
+    eventPoster: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=2574&auto=format&fit=crop",
+    rankScore: 86,
+    eventRanking: "5",
+    eventDateType: "tomorrow",
+    date: formatFullDate(tomorrow),
+    time: "6:00 pm to 11:00 pm (AEST)",
+    venueName: "Hyde Park",
+    venueAddress: "Elizabeth Street, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=Hyde+Park+Sydney+NSW+2000",
+    tags: ["Cultural", "Night", "Performance", "Food"],
+    description: `<p>An enchanting evening celebrating Sydney's diverse cultural landscape. Sydney Cultural Night brings together performances, food, and traditions from communities around the world.</p>
+    <p>Experience includes:</p>
+    <ul>
+      <li>Cultural dance performances</li>
+      <li>Traditional music ensembles</li>
+      <li>International food stalls</li>
+      <li>Artisan craft market</li>
+      <li>Lantern lighting ceremony</li>
+    </ul>
+    <p>Bring the whole family for an unforgettable cultural journey.</p>`,
+    organizerId: "org_saf001",
+    sponsors: ["Cultural Diversity Council", "World Food Market"]
+  },
+  
+  // Additional events for Sydney Jazz Foundation (org_sjf002)
+  {
+    id: "downtown-jazz-series",
+    eventName: "DOWNTOWN JAZZ SERIES",
+    eventAddress: "State Theatre, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "125",
+    eventPoster: "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?q=80&w=2940&auto=format&fit=crop",
+    rankScore: 90,
+    eventRanking: "6",
+    eventDateType: "nextWeek",
+    date: formatFullDate(nextWeek),
+    time: "7:30 pm to 10:30 pm (AEST)",
+    venueName: "State Theatre",
+    venueAddress: "49 Market St, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=State+Theatre+Sydney+NSW+2000",
+    tags: ["Jazz", "Live Music", "Concert Series"],
+    description: `<p>The Downtown Jazz Series presents world-class jazz musicians in an intimate setting. Each performance in this acclaimed series features a different jazz style and artist.</p>
+    <p>Event highlights:</p>
+    <ul>
+      <li>Performances by internationally acclaimed jazz artists</li>
+      <li>Curated selection of classic and contemporary jazz</li>
+      <li>Intimate venue with superior acoustics</li>
+      <li>Pre-show talk with the artists (VIP tickets only)</li>
+      <li>Complimentary program</li>
+    </ul>
+    <p>Smart casual attire recommended. Bar service available.</p>`,
+    organizerId: "org_sjf002",
+    sponsors: ["ABC Jazz", "Sydney Music Conservatory"]
+  },
+  {
+    id: "sunset-jazz-cruise",
+    eventName: "SUNSET JAZZ CRUISE",
+    eventAddress: "Sydney Harbour",
+    eventLocation: "Sydney",
+    eventPrice: "175",
+    eventPoster: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2874&auto=format&fit=crop",
+    rankScore: 89,
+    eventRanking: "7",
+    eventDateType: "nextMonth",
+    date: formatFullDate(nextMonth),
+    time: "5:30 pm to 9:00 pm (AEST)",
+    venueName: "Sydney Harbour Cruise",
+    venueAddress: "Circular Quay, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=Circular+Quay+Sydney+NSW+2000",
+    tags: ["Jazz", "Cruise", "Dinner", "Sunset"],
+    description: `<p>Experience the magic of live jazz while cruising Sydney Harbour at sunset. This exclusive event combines world-class jazz, gourmet dining, and stunning views of Sydney's iconic landmarks.</p>
+    <p>The experience includes:</p>
+    <ul>
+      <li>Three-hour harbor cruise with iconic Sydney views</li>
+      <li>Live jazz ensemble performance</li>
+      <li>Three-course gourmet dinner with wine pairing</li>
+      <li>Welcome champagne reception</li>
+      <li>Professional photography service (additional fee)</li>
+    </ul>
+    <p>Smart casual dress code. Boarding begins 30 minutes before departure.</p>`,
+    organizerId: "org_sjf002",
+    sponsors: ["Harbour Cruises", "Sydney Jazz Festival"]
+  },
+  
+  // Additional events for Sydney Symphony Orchestra (org_sso003)
+  {
+    id: "beethoven-symphony-night",
+    eventName: "BEETHOVEN SYMPHONY NIGHT",
+    eventAddress: "Sydney Opera House, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "185",
+    eventPoster: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?q=80&w=2940&auto=format&fit=crop",
+    rankScore: 92,
+    eventRanking: "8",
+    eventDateType: "nextWeek",
+    date: formatFullDate(nextWeek),
+    time: "7:00 pm to 9:30 pm (AEST)",
+    venueName: "Sydney Opera House Concert Hall",
+    venueAddress: "Bennelong Point, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=Sydney+Opera+House+Bennelong+Point+Sydney+NSW+2000",
+    tags: ["Classical", "Orchestra", "Beethoven", "Symphony"],
+    description: `<p>Experience the power and emotion of Beethoven's most beloved symphonies performed by the Sydney Symphony Orchestra. This special concert showcases Beethoven's revolutionary musical genius.</p>
+    <p>Program includes:</p>
+    <ul>
+      <li>Symphony No. 5 in C minor</li>
+      <li>Symphony No. 7 in A major</li>
+      <li>Egmont Overture</li>
+    </ul>
+    <p>Conducted by Maestro David Robertson with special guest soloist Anna Fedorova on piano. Pre-concert talk available 45 minutes before the performance.</p>`,
+    organizerId: "org_sso003",
+    sponsors: ["Steinway & Sons", "Classical Music Foundation"]
+  },
+  {
+    id: "family-orchestra-adventure",
+    eventName: "FAMILY ORCHESTRA ADVENTURE",
+    eventAddress: "Sydney Town Hall, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "45",
+    eventPoster: "https://images.unsplash.com/photo-1461784180009-21121b2f204c?q=80&w=2940&auto=format&fit=crop",
+    rankScore: 85,
+    eventRanking: "9",
+    eventDateType: "tomorrow",
+    date: formatFullDate(tomorrow),
+    time: "11:00 am to 12:30 pm (AEST)",
+    venueName: "Sydney Town Hall",
+    venueAddress: "483 George St, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=Sydney+Town+Hall+483+George+St+Sydney+NSW+2000",
+    tags: ["Family", "Orchestra", "Educational", "Children"],
+    description: `<p>Introduce your children to the wonder of orchestral music with this special family concert. Designed for young audiences, this interactive performance makes classical music accessible and fun.</p>
+    <p>Program features:</p>
+    <ul>
+      <li>Child-friendly arrangements of classical favorites</li>
+      <li>Introduction to orchestral instruments</li>
+      <li>Audience participation moments</li>
+      <li>Narrated musical stories</li>
+      <li>Meet-the-musicians session after the concert</li>
+    </ul>
+    <p>Recommended for ages 5-12. Children under 2 admitted free if sitting on parent's lap.</p>`,
+    organizerId: "org_sso003",
+    sponsors: ["Music Education Foundation", "Children's Arts Council"]
+  },
+  {
+    id: "movie-scores-concert",
+    eventName: "MOVIE SCORES CONCERT",
+    eventAddress: "Sydney Opera House, Sydney",
+    eventLocation: "Sydney",
+    eventPrice: "155",
+    eventPoster: "https://images.unsplash.com/photo-1513829596324-4bb2800c5efb?q=80&w=2940&auto=format&fit=crop",
+    rankScore: 91,
+    eventRanking: "10",
+    eventDateType: "nextMonth",
+    date: formatFullDate(nextMonth),
+    time: "8:00 pm to 10:30 pm (AEST)",
+    venueName: "Sydney Opera House Concert Hall",
+    venueAddress: "Bennelong Point, Sydney NSW 2000",
+    locationMap: "https://maps.google.com/?q=Sydney+Opera+House+Bennelong+Point+Sydney+NSW+2000",
+    tags: ["Orchestra", "Film Music", "Movie Scores", "Popular"],
+    description: `<p>Experience the Sydney Symphony Orchestra performing iconic film scores from cinematic history. This concert brings to life the music that has defined generations of beloved films.</p>
+    <p>Program includes scores from:</p>
+    <ul>
+      <li>Star Wars and Indiana Jones (John Williams)</li>
+      <li>The Lord of the Rings (Howard Shore)</li>
+      <li>The Godfather (Nino Rota)</li>
+      <li>Pirates of the Caribbean (Hans Zimmer)</li>
+      <li>James Bond themes (Various composers)</li>
+    </ul>
+    <p>Film clips will be displayed on large screens during the performance. Special guest conductor John Novacek.</p>`,
+    organizerId: "org_sso003",
+    sponsors: ["Film Australia", "Screen NSW"]
+  }
+];
+
+// Add the additional events to Sydney events
+sydneyEvents.push(...additionalEvents);
 
 // Add location-specific events collections
 const locationEvents = {
@@ -363,6 +669,7 @@ module.exports = {
   spotlightEvents,
   flyerData,
   locationEvents,
+  organizers,
   formatDate,
   formatFullDate,
 };
