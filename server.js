@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const path = require('path');
 const logger = require('./middleware/logger');
 const eventRoutes = require('./routes/eventRoutes');
+const dataRoutes = require('./routes/dataRoutes');
 
 // Load environment variables
 require('dotenv').config();
@@ -35,6 +36,7 @@ app.use(logger); // Custom logger
 
 // Routes
 app.use('/api/events', eventRoutes);
+app.use('/getData', dataRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -52,7 +54,19 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`API available at http://localhost:${PORT}/api/events`);
+  console.log(`MongoDB endpoint available at http://localhost:${PORT}/getData`);
+});
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+  console.log('Shutting down server...');
+  
+  // Close server
+  server.close(() => {
+    console.log('Server shut down complete');
+    process.exit(0);
+  });
 });
