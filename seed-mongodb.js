@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const { spotlightEvents, flyerData, locationEvents, organizers, locationDetails } = require('./data/events');
 
 // MongoDB connection URI
-const uri = 'mongodb://mongo:CIQAbElaayhSABwsPqWrEubkJEWcnlJb@shuttle.proxy.rlwy.net:32289';
+const uri = process.env.PUBLIC_URL;
 const dbName = 'tixmojo';
 
 async function seedDatabase() {

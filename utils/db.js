@@ -2,11 +2,7 @@ const { MongoClient } = require('mongodb');
 
 // Connection URL - Try multiple options to handle common MongoDB configurations
 const urls = [
-  'mongodb://mongo:CIQAbElaayhSABwsPqWrEubkJEWcnlJb@shuttle.proxy.rlwy.net:32289',
-  // 'mongodb://localhost:27017',
-  // 'mongodb://127.0.0.1:27017',
-  // 'mongodb://0.0.0.0:27017',
-  // 'mongodb://localhost:27017/tixmojo' // With database name in URL
+  process.env.PUBLIC_URL
 ];
 const dbName = 'tixmojo';
 
