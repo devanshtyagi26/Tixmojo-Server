@@ -320,11 +320,54 @@ const getLocationDetails = async (req, res) => {
 
     // Get location details
     if (location) {
-      // Get details for specific location
-      const locationDetails = await db.collection('locationDetails').findOne({ id: location });
-
+      // Convert location to lowercase for case-insensitive matching
+      const locationLower = location.toLowerCase();
+      
+      // First try to find by exact ID match
+      let locationDetails = await db.collection('locationDetails').findOne({ id: locationLower });
+      
+      // If not found, try case-insensitive search
       if (!locationDetails) {
-        return sendError(res, 404, 'Location details not found');
+        locationDetails = await db.collection('locationDetails').findOne({ 
+          id: { $regex: new RegExp(`^${locationLower}$`, 'i') } 
+        });
+      }
+      
+      // Additional fallback: try to find by name instead of id
+      if (!locationDetails) {
+        locationDetails = await db.collection('locationDetails').findOne({ 
+          name: { $regex: new RegExp(`^${location}$`, 'i') } 
+        });
+      }
+      
+      // If still not found, try to find by location from 'locations' collection
+      if (!locationDetails) {
+        const locationFromList = await db.collection('locations').findOne({ 
+          name: { $regex: new RegExp(`^${location}$`, 'i') } 
+        });
+        
+        if (locationFromList) {
+          // Create a basic location details object
+          locationDetails = {
+            id: locationFromList.name.toLowerCase(),
+            name: locationFromList.name,
+            title: 'Events in',
+            subtitle: `Discover the most popular events happening in ${locationFromList.name} right now`,
+            description: `Explore all upcoming events in ${locationFromList.name}`
+          };
+        }
+      }
+
+      // If not found after all attempts, return fallback data rather than 404
+      if (!locationDetails) {
+        console.log(`Location details not found for: ${location}, providing fallback data`);
+        locationDetails = {
+          id: location.toLowerCase(),
+          name: location,
+          title: 'Events in',
+          subtitle: `Discover the most popular events happening in ${location} right now`,
+          description: `Explore all upcoming events in ${location}`
+        };
       }
 
       return sendSuccess(res, locationDetails);

@@ -89,9 +89,25 @@ async function seedDatabase() {
     // Store location details
     if (locationDetails) {
       const locationDetailsArray = Object.entries(locationDetails).map(([key, value]) => ({
-        id: key,
+        id: key.toLowerCase(), // Ensure IDs are lowercase
         ...value
       }));
+
+      // Add Sydney location details explicitly if not already in the data
+      if (!locationDetailsArray.some(loc => loc.id === 'sydney')) {
+        locationDetailsArray.push({
+          id: 'sydney',
+          name: 'Sydney',
+          title: 'Events in',
+          subtitle: 'Discover the most popular events happening in Sydney right now',
+          description: 'Sydney is Australia\'s iconic harbor city and the capital of New South Wales.',
+          timezone: 'Australia/Sydney',
+          coordinates: {
+            latitude: -33.8688,
+            longitude: 151.2093
+          }
+        });
+      }
 
       console.log(`Inserting ${locationDetailsArray.length} location details...`);
       const result = await db.collection('locationDetails').insertMany(locationDetailsArray);
