@@ -2,12 +2,12 @@ const { MongoClient } = require('mongodb');
 const { spotlightEvents, flyerData, locationEvents, organizers, locationDetails } = require('./data/events');
 
 // MongoDB connection URI
-const uri = process.env.PUBLIC_URL;
+const uri = process.env.MONGODB_URI;
 const dbName = 'tixmojo';
 
 async function seedDatabase() {
   let client;
-
+  
   try {
     console.log('Connecting to MongoDB...');
     client = new MongoClient(uri);
@@ -15,7 +15,7 @@ async function seedDatabase() {
     console.log('Connected successfully to MongoDB');
 
     const db = client.db(dbName);
-
+    
     // Drop existing collections if they exist
     const collections = ['events', 'organizers', 'flyers', 'locations', 'locationDetails'];
     for (const collection of collections) {

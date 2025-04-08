@@ -1,8 +1,9 @@
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
 // Connection URL - Try multiple options to handle common MongoDB configurations
 const urls = [
-  process.env.PUBLIC_URL
+  `${process.env.MONGODB_URI}`
 ];
 const dbName = 'tixmojo';
 

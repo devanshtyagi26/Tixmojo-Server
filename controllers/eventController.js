@@ -15,7 +15,7 @@ const getAllEvents = async (req, res) => {
 
     // Capitalize first letter for consistency
     const formattedLocation = location.charAt(0).toUpperCase() + location.slice(1).toLowerCase();
-
+    
     // Connect to MongoDB
     const connection = await connectToDatabase();
     const db = connection.db;
@@ -53,7 +53,7 @@ const getSpotlightEvents = async (req, res) => {
 
   try {
     const location = req.query.location;
-
+    
     // Connect to MongoDB
     const connection = await connectToDatabase();
     const db = connection.db;
@@ -70,7 +70,7 @@ const getSpotlightEvents = async (req, res) => {
 
     // Get spotlight events
     const spotlightEvents = await db.collection('events').find(query).toArray();
-
+    
     return sendSuccess(res, spotlightEvents);
   } catch (error) {
     console.error('Error getting spotlight events:', error);
@@ -130,7 +130,7 @@ const getEventById = async (req, res) => {
 
   try {
     const { id } = req.params;
-
+    
     // Connect to MongoDB
     const connection = await connectToDatabase();
     const db = connection.db;
@@ -157,7 +157,7 @@ const getEventById = async (req, res) => {
       const organizer = await db.collection('organizers').findOne({ id: event.organizerId });
 
       if (organizer) {
-        // Replace organizerId with full organizer details
+      // Replace organizerId with full organizer details
         event.organizer = organizer;
       }
     }
@@ -195,13 +195,13 @@ const getLocations = async (req, res) => {
     // Get locations from locations collection
     const locations = await db.collection('locations').find({}).toArray();
     const locationNames = locations.map(location => location.name);
-
+    
     // Also get unique locations from events collection
     const eventLocations = await db.collection('events').distinct('eventLocation');
-
+    
     // Combine and deduplicate
     const allLocations = [...new Set([...locationNames, ...eventLocations])];
-
+    
     return sendSuccess(res, allLocations);
   } catch (error) {
     console.error('Error getting locations:', error);
@@ -231,7 +231,7 @@ const getRawEvents = async (req, res) => {
 
     // Capitalize first letter for consistency
     const formattedLocation = location.charAt(0).toUpperCase() + location.slice(1).toLowerCase();
-
+    
     // Connect to MongoDB
     const connection = await connectToDatabase();
     const db = connection.db;
@@ -275,7 +275,7 @@ const getLocationSpecificEvents = async (req, res) => {
 
     // Capitalize first letter for consistency
     const formattedLocation = location.charAt(0).toUpperCase() + location.slice(1).toLowerCase();
-
+    
     // Connect to MongoDB
     const connection = await connectToDatabase();
     const db = connection.db;
@@ -312,7 +312,7 @@ const getLocationDetails = async (req, res) => {
 
   try {
     const { location } = req.params;
-
+    
     // Connect to MongoDB
     const connection = await connectToDatabase();
     const db = connection.db;
@@ -369,7 +369,7 @@ const getEventsByOrganizer = async (req, res) => {
     if (!organizerId) {
       return sendError(res, 400, 'Organizer ID parameter is required');
     }
-
+    
     // Connect to MongoDB
     const connection = await connectToDatabase();
     const db = connection.db;
@@ -379,7 +379,7 @@ const getEventsByOrganizer = async (req, res) => {
     const events = await db.collection('events').find({
       organizerId: organizerId
     }).toArray();
-
+    
     return sendSuccess(res, events);
   } catch (error) {
     console.error('Error getting events by organizer:', error);

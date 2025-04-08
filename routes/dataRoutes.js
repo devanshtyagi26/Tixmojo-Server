@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     const connection = await connectToDatabase();
     const db = connection.db;
     client = connection.client;
-    
+
     // Get events from MongoDB
     const events = await db.collection('events').find({}).toArray();
     
@@ -77,7 +77,7 @@ router.get('/organizers', async (req, res) => {
     }
   }
 });
-
+    
 // GET flyers data
 router.get('/flyers', async (req, res) => {
   let client;
@@ -111,7 +111,7 @@ router.get('/flyers', async (req, res) => {
         await client.close();
       } catch (err) {
         console.error('Error closing MongoDB connection:', err);
-      }
+    }
     }
   }
 });
