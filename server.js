@@ -14,6 +14,7 @@ const stripeRoutes = require('./routes/stripeRoutes');
 const phoneRoutes = require('./routes/phoneRoutes');
 const userRoutes = require('./routes/userRoutes');
 const aboutRoutes = require('./routes/aboutRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 // Load environment variables
 require('dotenv').config();
@@ -67,6 +68,7 @@ app.use('/api/phone', phoneRoutes);
 app.use('/api/users', userRoutes);
 app.use('/getData', dataRoutes);
 app.use('/api/about', aboutRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
