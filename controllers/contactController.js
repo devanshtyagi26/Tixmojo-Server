@@ -193,7 +193,21 @@ The TixMojo Team
   }
 };
 
+// Sending display data
+const { sendSuccess, sendError } = require('../utils/responseUtils');
+const {contact} = require('../data/contact');
+
+const getContact = async (req, res) => {
+  try {
+    return sendSuccess(res, contact);
+  } catch (error) {
+    console.error('Error getting contact:', error);
+    return sendError(res, 500, 'Failed to get contact', error);
+  }
+};
+
 module.exports = {
   contactValidationRules,
-  submitContactForm
+  submitContactForm,
+  getContact
 };
