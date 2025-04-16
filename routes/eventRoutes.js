@@ -5,6 +5,9 @@ const eventController = require('../controllers/eventController');
 // Get all events (with optional location filter)
 router.get('/', eventController.getAllEvents);
 
+// Search events by keyword and/or location
+router.get('/search', eventController.searchEvents);
+
 // Define all specific routes before the catch-all :id route
 
 // Get raw events from locationEvents (with optional location filter)

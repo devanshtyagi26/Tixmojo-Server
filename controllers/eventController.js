@@ -2,6 +2,55 @@ const { formatDate, formatFullDate } = require('../data/events');
 const { sendSuccess, sendError } = require('../utils/responseUtils');
 const { connectToDatabase } = require('../utils/db');
 
+/**
+ * Search events by keyword in event name, description, or location
+ * @param {Request} req - Express request object with query parameters
+ * @param {Response} res - Express response object
+ * @returns {Response} - JSON response with search results
+ */
+const searchEvents = async (req, res) => {
+  try {
+    const { query, location } = req.query;
+    
+    if (!query && !location) {
+      return sendError(res, 400, 'Search query or location is required');
+    }
+
+    const { db } = await connectToDatabase();
+    
+    // Build search criteria
+    let searchCriteria = {};
+    
+    if (query) {
+      // Create a text search for event name and description
+      searchCriteria.$or = [
+        { eventName: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { venueName: { $regex: query, $options: 'i' } },
+        { venueAddress: { $regex: query, $options: 'i' } }
+      ];
+    }
+    
+    if (location) {
+      // Format location with first letter uppercase
+      const formattedLocation = location.charAt(0).toUpperCase() + location.slice(1).toLowerCase();
+      searchCriteria.eventLocation = formattedLocation;
+    }
+    
+    // Execute the search query with a limit
+    const searchResults = await db.collection('events')
+      .find(searchCriteria)
+      .limit(12)  // Limit to 12 results
+      .toArray();
+    
+    // Return the results
+    return sendSuccess(res, searchResults);
+  } catch (error) {
+    console.error('Error searching events:', error);
+    return sendError(res, 500, 'Failed to search events', error);
+  }
+};
+
 const getAllEvents = async (req, res) => {
   try {
     const location = req.query.location || 'Sydney';
@@ -253,5 +302,6 @@ module.exports = {
   getRawEvents,
   getLocationSpecificEvents,
   getEventsByOrganizer,
-  getAllAppData
+  getAllAppData,
+  searchEvents
 };
