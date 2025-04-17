@@ -524,6 +524,45 @@ const calculateTotalAmount = (cartItems) => {
   }, 0);
 };
 
+/**
+ * Get payment details by paymentIntentId
+ * Returns only safe details for frontend display
+ */
+const getPaymentDetails = (req, res) => {
+  try {
+    const { paymentIntentId } = req.params;
+    if (!paymentIntentId) {
+      return respondWithError(res, 'Missing paymentIntentId', 400);
+    }
+    // Find the session with this paymentIntentId
+    let found = null;
+    for (const session of paymentSessions.values()) {
+      if (session.paymentIntentId === paymentIntentId) {
+        found = session;
+        break;
+      }
+    }
+    if (!found) {
+      return respondWithError(res, 'Payment not found', 404);
+    }
+    // Prepare safe details
+    const details = {
+      amount: found.totalAmount,
+      created: found.created,
+      email: found.buyerInfo?.email || null,
+      card: found.card ? {
+        last4: found.card.last4,
+        brand: found.card.brand
+      } : null,
+      id: paymentIntentId
+    };
+    return respondWithSuccess(res, details);
+  } catch (error) {
+    logger.error('Error fetching payment details:', error);
+    return respondWithError(res, 'Failed to fetch payment details', 500);
+  }
+};
+
 module.exports = {
   initializePaymentSession,
   validateBuyerInfo,
@@ -531,5 +570,6 @@ module.exports = {
   confirmPaymentSuccess,
   applyPromoCode,
   getSessionStatus,
-  handleStripeWebhook
+  handleStripeWebhook,
+  getPaymentDetails
 };

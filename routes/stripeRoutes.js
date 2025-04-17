@@ -26,6 +26,9 @@ router.post('/apply-promo', stripeController.applyPromoCode);
 // Get session status
 router.get('/session-status/:sessionId', stripeController.getSessionStatus);
 
+// Get payment details by paymentIntentId
+router.get('/payment-details/:paymentIntentId', stripeController.getPaymentDetails);
+
 // Webhook handler for Stripe events
 // Note: The raw body parsing is handled in the main server.js file
 router.post('/webhook', stripeController.handleStripeWebhook);
