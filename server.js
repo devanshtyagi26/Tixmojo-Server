@@ -13,6 +13,7 @@ const dataRoutes = require('./routes/dataRoutes');
 const stripeRoutes = require('./routes/stripeRoutes');
 const phoneRoutes = require('./routes/phoneRoutes');
 const userRoutes = require('./routes/userRoutes');
+const ticketRoutes = require('./routes/ticketRoutes');
 const aboutRoutes = require('./routes/aboutRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const footerRoutes = require('./routes/footerRoutes');
@@ -66,6 +67,7 @@ connectToDatabase()
 // Routes
 app.use('/api/events', eventRoutes);
 app.use('/api/payments', stripeRoutes);
+app.use('/api/tickets', ticketRoutes);
 app.use('/api/phone', phoneRoutes);
 app.use('/api/users', userRoutes);
 app.use('/getData', dataRoutes);

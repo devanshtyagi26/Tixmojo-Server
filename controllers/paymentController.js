@@ -38,21 +38,21 @@ setInterval(() => {
 const initializePaymentSession = (req, res) => {
   try {
     const { cartItems, event } = req.body;
-    
+
     if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
       return respondWithError(res, 'Invalid cart items', 400);
     }
-    
+
     if (!event || !event.id) {
       return respondWithError(res, 'Invalid event information', 400);
     }
-    
+
     // Generate a secure session ID
     const sessionId = crypto.randomBytes(16).toString('hex');
-    
+
     // Calculate expiry time (10 minutes)
     const expiresAt = Date.now() + 10 * 60 * 1000;
-    
+
     // Store cart items and event info in server-side session
     paymentSessions.set(sessionId, {
       cartItems,
@@ -63,9 +63,9 @@ const initializePaymentSession = (req, res) => {
       discount: 0, // Default discount
       status: 'initialized'
     });
-    
+
     logger.info(`Payment session ${sessionId} initialized for event ${event.id}`);
-    
+
     // Return session ID and expiry time to client
     return respondWithSuccess(res, {
       sessionId,
@@ -84,25 +84,25 @@ const initializePaymentSession = (req, res) => {
 const validateBuyerInfo = (req, res) => {
   try {
     const { sessionId, firstName, lastName, email, phone } = req.body;
-    
+
     // Verify the session exists
     if (!paymentSessions.has(sessionId)) {
       return respondWithError(res, 'Invalid or expired session', 400);
     }
-    
+
     // Check if session has expired
     const session = paymentSessions.get(sessionId);
     if (session.expiresAt < Date.now()) {
       paymentSessions.delete(sessionId);
       return respondWithError(res, 'Session expired', 400);
     }
-    
+
     // Validate buyer information
     const validationErrors = validatePaymentData({ firstName, lastName, email, phone });
     if (validationErrors.length > 0) {
       return respondWithError(res, 'Validation failed', 400, { errors: validationErrors });
     }
-    
+
     // Add buyer info to session (hashing sensitive data)
     session.buyerInfo = {
       firstName,
@@ -111,11 +111,11 @@ const validateBuyerInfo = (req, res) => {
       phone: hashSensitiveData(phone),
       validated: true
     };
-    
+
     session.status = 'buyer_validated';
-    
+
     logger.info(`Buyer info validated for session ${sessionId}`);
-    
+
     return respondWithSuccess(res, { valid: true });
   } catch (error) {
     logger.error('Error validating buyer info:', error);
@@ -130,42 +130,42 @@ const validateBuyerInfo = (req, res) => {
 const processPayment = (req, res) => {
   try {
     const { sessionId } = req.body;
-    
+
     // Verify the session exists
     if (!paymentSessions.has(sessionId)) {
       return respondWithError(res, 'Invalid or expired session', 400);
     }
-    
+
     // Check if session has expired
     const session = paymentSessions.get(sessionId);
     if (session.expiresAt < Date.now()) {
       paymentSessions.delete(sessionId);
       return respondWithError(res, 'Session expired', 400);
     }
-    
+
     // Verify buyer info has been validated
     if (!session.buyerInfo || !session.buyerInfo.validated) {
       return respondWithError(res, 'Buyer information not validated', 400);
     }
-    
+
     // In production, this would call a payment processor API
     // For demo purposes, we'll simulate a successful payment
-    
+
     // Generate order ID
     const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    
+
     // Update session with payment info
     session.status = 'payment_completed';
     session.orderId = orderId;
     session.paymentCompleted = Date.now();
-    
+
     logger.info(`Payment processed successfully for session ${sessionId}. Order ID: ${orderId}`);
-    
+
     // Return success response with order ID
     return respondWithSuccess(res, {
       orderId,
       status: 'success',
-      totalPaid: session.totalAmount - (session.totalAmount * session.discount) + 10 // Adding $10 service fee
+      totalPaid: session.totalAmount - (session.totalAmount * session.discount) + session.serviceFee
     });
   } catch (error) {
     logger.error('Error processing payment:', error);
@@ -180,24 +180,24 @@ const processPayment = (req, res) => {
 const applyPromoCode = (req, res) => {
   try {
     const { sessionId, promoCode } = req.body;
-    
+
     // Verify the session exists
     if (!paymentSessions.has(sessionId)) {
       return respondWithError(res, 'Invalid or expired session', 400);
     }
-    
+
     // Check if session has expired
     const session = paymentSessions.get(sessionId);
     if (session.expiresAt < Date.now()) {
       paymentSessions.delete(sessionId);
       return respondWithError(res, 'Session expired', 400);
     }
-    
+
     // Simple promo code validation (would connect to database in production)
     let discount = 0;
     let message = 'Invalid promo code';
     let valid = false;
-    
+
     // Demo promo codes
     if (promoCode.toUpperCase() === 'TIXMOJO10') {
       discount = 0.1; // 10% discount
@@ -208,14 +208,14 @@ const applyPromoCode = (req, res) => {
       message = '25% discount applied';
       valid = true;
     }
-    
+
     if (valid) {
       // Apply discount to session
       session.discount = discount;
       session.promoCode = promoCode;
-      
+
       logger.info(`Promo code ${promoCode} applied to session ${sessionId} with ${discount * 100}% discount`);
-      
+
       return respondWithSuccess(res, {
         valid,
         discount,
@@ -238,19 +238,19 @@ const applyPromoCode = (req, res) => {
 const getSessionStatus = (req, res) => {
   try {
     const { sessionId } = req.params;
-    
+
     // Verify the session exists
     if (!paymentSessions.has(sessionId)) {
       return respondWithError(res, 'Invalid or expired session', 400);
     }
-    
+
     // Check if session has expired
     const session = paymentSessions.get(sessionId);
     if (session.expiresAt < Date.now()) {
       paymentSessions.delete(sessionId);
       return respondWithError(res, 'Session expired', 400);
     }
-    
+
     // Return session details
     return respondWithSuccess(res, {
       status: session.status,
@@ -273,9 +273,9 @@ const calculateTotalAmount = (cartItems) => {
 // Helper function to calculate total with discount
 const calculateTotalWithDiscount = (session) => {
   const subtotal = session.totalAmount;
-  const serviceFee = 10; // Fixed service fee
+  const serviceFee = (subtotal * 0.06) + session.quantity; // Fixed service fee
   const discountAmount = subtotal * session.discount;
-  
+
   return subtotal + serviceFee - discountAmount;
 };
 
