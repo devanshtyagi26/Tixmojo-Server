@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
     secure: process.env.SMTP_SECURE === 'true',
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD
+      pass: process.env.SMTP_PASS
     }
   });
 } else {
@@ -57,7 +57,7 @@ const sendMail = async (id, email, option, data = {}) => {
       case 'email verification':
         const emailToken = generateToken(id, 'email');
         const verificationUrl = `${frontendURL}/user/verify/${emailToken}`;
-        
+
         mailOptions.subject = 'Verify your TixMojo account';
         mailOptions.html = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
@@ -74,11 +74,11 @@ const sendMail = async (id, email, option, data = {}) => {
           </div>
         `;
         break;
-        
+
       case 'forgot password':
         const resetToken = generateToken(id, 'forgot-password');
         const resetUrl = `${frontendURL}/user/reset-password/${resetToken}`;
-        
+
         mailOptions.subject = 'Reset Your TixMojo Password';
         mailOptions.html = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
@@ -95,11 +95,12 @@ const sendMail = async (id, email, option, data = {}) => {
           </div>
         `;
         break;
-        
+
       case 'ticket confirmation':
+
         const eventName = data.eventName || 'Your Event';
         const ticketUrl = `${frontendURL}/tickets/${data.ticketId}`;
-        
+
         mailOptions.subject = `Your TixMojo Tickets for ${eventName}`;
         mailOptions.html = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
@@ -123,22 +124,34 @@ const sendMail = async (id, email, option, data = {}) => {
             <p>Best regards,<br>The TixMojo Team</p>
           </div>
         `;
+
+        if (data.attachmentPath) {
+          mailOptions.attachments = [{
+            filename: `${data.ticketId}.pdf`,
+            path: data.attachmentPath
+          }];
+        }
+
         break;
-        
+
       default:
         throw new Error(`Invalid email option: ${option}`);
     }
 
+    console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+    console.log('🔐 Using SMTP user:', process.env.SMTP_USER);
+    console.log('🔐 SMTP PASS SET:', !!process.env.SMTP_PASS);
+
     // Send the email
     const info = await transporter.sendMail(mailOptions);
-    
+
     Logger.info(`Email sent: ${info.messageId}`);
-    
+
     // Return a preview URL in development (for testing with Ethereal)
     if (process.env.NODE_ENV !== 'production') {
       Logger.info(`Email preview URL: ${nodemailer.getTestMessageUrl(info)}`);
     }
-    
+
     return info;
   } catch (error) {
     Logger.error(`Error sending email: ${error.message}`);
