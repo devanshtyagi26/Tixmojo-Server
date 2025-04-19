@@ -1,26 +1,32 @@
-/**
- * Payment Routes
- * 
- * Express routes for payment processing
- */
-
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-const paymentController = require('../controllers/paymentController');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_DEV);
 
-// Initialize a new payment session
-router.post('/initialize', paymentController.initializePaymentSession);
+router.post('/create-intent', async (req, res) => {
+    try {
+        const { amount, currency = 'usd', email, eventName } = req.body;
 
-// Validate buyer information
-router.post('/validate-buyer', paymentController.validateBuyerInfo);
+        if (!amount || isNaN(amount) || amount <= 0) {
+            return res.status(400).json({ error: 'Invalid amount' });
+        }
 
-// Process payment
-router.post('/process', paymentController.processPayment);
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Math.round(amount * 100),
+            currency,
+            metadata: {
+                email: email || 'no_email',
+                event: eventName || 'unknown_event',
+            },
+        });
 
-// Apply promo code
-router.post('/apply-promo', paymentController.applyPromoCode);
-
-// Get session status
-router.get('/session-status/:sessionId', paymentController.getSessionStatus);
+        res.json({
+            id: paymentIntent.id,
+            clientSecret: paymentIntent.client_secret,
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 module.exports = router;

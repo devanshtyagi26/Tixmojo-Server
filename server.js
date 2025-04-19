@@ -8,6 +8,7 @@ const Logger = require('./utils/logger');
 const { connectToDatabase } = require('./utils/db');
 
 // Route imports
+
 const eventRoutes = require('./routes/eventRoutes');
 const dataRoutes = require('./routes/dataRoutes');
 const stripeRoutes = require('./routes/stripeRoutes');
@@ -18,6 +19,7 @@ const aboutRoutes = require('./routes/aboutRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const footerRoutes = require('./routes/footerRoutes');
 const pagenotfoundRoutes = require('./routes/pagenotfound');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 // Load environment variables
 require('dotenv').config();
@@ -66,7 +68,6 @@ connectToDatabase()
 
 // Routes
 app.use('/api/events', eventRoutes);
-app.use('/api/payments', stripeRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/phone', phoneRoutes);
 app.use('/api/users', userRoutes);
@@ -75,6 +76,7 @@ app.use('/api/about', aboutRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/footer', footerRoutes);
 app.use('/api/page-not-found', pagenotfoundRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
