@@ -1,24 +1,25 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
-const generateTicketHTML = require('../email/generateTicketHTML');
+const generateTicketHTML = require('../utils/generateTicketHTML');
 const sendMail = require('../utils/sendMails');
 
 exports.sendTicket = async (req, res) => {
     const { name, email, eventName, bookingCode, seat, date } = req.body;
-    console.log('🔥 /api/tickets/send-ticket HIT');
-    console.log('📥 Payload:', req.body);
 
-    const html = generateTicketHTML({ name, eventName, bookingCode, seat, date });
-    const pdfPath = path.join(__dirname, `../../email/${bookingCode}.pdf`);
+    // ✅ Step 1: Respond immediately to frontend
+    res.status(200).json({ success: true, message: 'Ticket generation started.' });
 
-    // Ensure /email folder exists
-    fs.mkdirSync(path.dirname(pdfPath), { recursive: true });
-
+    // ✅ Step 2: Handle PDF & email in background (no await in frontend)
     try {
+        const html = generateTicketHTML({ name, eventName, bookingCode, seat, date });
+        const pdfPath = path.join(__dirname, `../../email/${bookingCode}.pdf`);
+
+        fs.mkdirSync(path.dirname(pdfPath), { recursive: true });
+
         const browser = await puppeteer.launch({
             headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
 
         const page = await browser.newPage();
@@ -26,9 +27,9 @@ exports.sendTicket = async (req, res) => {
         await page.pdf({ path: pdfPath, format: 'A4' });
         await browser.close();
 
-        // Send using your unified mailer
+        // ✅ Step 3: Email the ticket PDF
         await sendMail(
-            null, // ID (optional if not verifying user)
+            null,
             email,
             'ticket confirmation',
             {
@@ -37,18 +38,14 @@ exports.sendTicket = async (req, res) => {
                 eventDate: date,
                 ticketType: seat,
                 ticketCount: 1,
-                venue: 'See ticket', // or pass real venue
+                venue: 'See ticket',
                 ticketId: bookingCode,
                 attachmentPath: pdfPath
             }
         );
 
-        console.log('🎯 /send-ticket route hit');
-        console.log('📧 Sending ticket to:', email);
-        console.log('📄 Ticket PDF path:', pdfPath);
-        return res.json({ success: true });
-    } catch (error) {
-        console.error('Error generating or sending ticket:', error);
-        return res.status(500).json({ success: false, message: 'Ticket delivery failed.' });
+        console.log(`✅ Ticket email sent to ${email}`);
+    } catch (err) {
+        console.error('❌ Error during async ticket generation:', err);
     }
 };
